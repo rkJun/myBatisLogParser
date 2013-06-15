@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>MyBatis Log parser</title>
-		<script src="jquery-2.0.2.js"></script>
+		<script src="js/jquery-2.0.2.js"></script>
 	</head>
 	<body>
 		<div id="div_origin" style="float:left">
@@ -18,54 +18,55 @@
 
 		<script>
 			$(document).ready(function() {
+				/**
+				 * myBatis 로그 합치기
+				 * Preparing: Select dummy from dual where col = ? and col2 = ?
+				 * Parameters: val1(String), val2(String)
+				 *
+				 * Result) select ... where col = val1 and col2 = val2
+				 *
+				 * @return {[type]} [description]
+				 */
+				var doParse = function () {
+					var $txt_origin = $("#txt_origin");
+					var $txt_parsing = $("#txt_parsing");
+
+					var originArr = [], parsingArr = [], paramArr = [];
+					var paramCnt = 0;
+					var result = "";
+					var preparing = "";
+					var param = {};
+
+					originArr = $txt_origin.val().split("\n");
+					parsingArr[0] = originArr[0].substring ( originArr[0].indexOf ("Preparing: ")+11 );
+					parsingArr[1] = originArr[1].substring ( originArr[1].indexOf ("Parameters: ")+12 );
+
+					preparing  = parsingArr[0];
+					paramArr = parsingArr[1].split(",");
+
+					for (var i = 0; i < paramArr.length; i++) {
+						var tempParams = paramArr[i];
+						param.val = tempParams.substring(0, tempParams.lastIndexOf("("));
+						param.typ = tempParams.substring(tempParams.lastIndexOf("(")+1, paramArr[i].lastIndexOf(")"));
+
+						if ( preparing.indexOf("?") >= 0 ) {
+
+							if (param.typ === "String") {
+								param.val = "'"+param.val+"'";
+							}
+							preparing = preparing.replace("?", param.val);
+						}
+
+					}
+					result = preparing;
+					$txt_parsing.html(result);
+				};
+
 				$("body").on("click", "button", function (e) {
 					doParse();
 				});
+
 			});
-
-			/**
-			 * myBatis 로그 합치기
-			 * Preparing: Select dummy from dual where col = ? and col2 = ?
-			 * Parameters: val1(String), val2(String)
-			 *
-			 * Result) select ... where col = val1 and col2 = val2
-			 *
-			 * @return {[type]} [description]
-			 */
-			var doParse = function () {
-				var $txt_origin = $("#txt_origin");
-				var $txt_parsing = $("#txt_parsing");
-
-				var originArr = [], parsingArr = [], paramArr = [];
-				var paramCnt = 0;
-				var result = "";
-				var preparing = "";
-				var param = {};
-
-				originArr = $txt_origin.val().split("\n");
-				parsingArr[0] = originArr[0].substring ( originArr[0].indexOf ("Preparing: ")+11 );
-				parsingArr[1] = originArr[1].substring ( originArr[1].indexOf ("Parameters: ")+12 );
-
-				preparing  = parsingArr[0];
-				paramArr = parsingArr[1].split(",");
-
-				for (var i = 0; i < paramArr.length; i++) {
-					var tempParams = paramArr[i];
-					param.val = tempParams.substring(0, tempParams.lastIndexOf("("));
-					param.typ = tempParams.substring(tempParams.lastIndexOf("(")+1, paramArr[i].lastIndexOf(")"));
-
-					if ( preparing.indexOf("?") >= 0 ) {
-
-						if (param.typ === "String") {
-							param.val = "'"+param.val+"'";
-						}
-						preparing = preparing.replace("?", param.val);
-					}
-
-				}
-				result = preparing;
-				$txt_parsing.html(result);
-			};
 		</script>
 	</body>
 </html>
