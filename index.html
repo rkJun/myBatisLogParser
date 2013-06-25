@@ -1,21 +1,31 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="ko">
 	<head>
 		<meta charset="utf-8">
 		<title>MyBatis Log parser</title>
 		<script src="js/jquery-2.0.2.js"></script>
+		<sciprt src="js/bootstrap.js"></script>
+		<script src="js/tipJS-MVC-dev.js"></script>
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+		<style type="text/css">
+			body { font-family: monaco, 나눔고딕, "Apple Gothic", sans-serif; }
+			textarea { font-family: monaco, 나눔고딕, "Apple Gothic", sans-serif; }
+		</style>
 	</head>
 	<body>
-		<div id="div_origin" style="float:left">
-			<textarea id="txt_origin" rows="30" cols="40"></textarea>
+		<div style="margin-left:10px;">
+			<h1>myBatis log parser</h1>
+			<div id="div_origin" style="float:left">
+				<textarea id="txt_origin" rows="20" cols="100"></textarea>
+			</div>
+			<div id="div_btn" class=".btn" style="float:left;margin-left:20px;">
+				<button id="btn_parse" class="btn btn-small">Parse</button>
+			</div>
+			<div id="div_parse" style="float:left;margin-left:20px;">
+				<textarea id="txt_parsing" rows="20" cols="100"></textarea>
+			</div>
 		</div>
-		<div id="div_origin" style="float:left">
-			<button id="btn_parse">Parse</button>
-		</div>
-		<div id="div_origin" style="float:left">
-			<textarea id="txt_parsing" rows="30" cols="40"></textarea>
-		</div>
-
 		<script>
 			$(document).ready(function() {
 				/**
@@ -46,7 +56,7 @@
 
 					for (var i = 0; i < paramArr.length; i++) {
 						var tempParams = paramArr[i];
-						param.val = tempParams.substring(0, tempParams.lastIndexOf("("));
+						param.val = $.trim ( tempParams.substring(0, tempParams.lastIndexOf("(")) );
 						param.typ = tempParams.substring(tempParams.lastIndexOf("(")+1, paramArr[i].lastIndexOf(")"));
 
 						if ( preparing.indexOf("?") >= 0 ) {
