@@ -3,31 +3,52 @@
 	<head>
 		<meta charset="utf-8">
 		<title>MyBatis Log parser</title>
-		<script src="js/jquery-2.0.2.js"></script>
-		<sciprt src="js/bootstrap.js"></script>
+<!--		<script src="js/jquery-2.0.2.js"></script> -->
+<!--		<sciprt src="js/bootstrap.js"></script> -->
 		<script src="js/tipJS-MVC-dev.js"></script>
+
 		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/common.css" rel="stylesheet" media="screen">
 
 		<style type="text/css">
-			body { font-family: monaco, 나눔고딕, "Apple Gothic", sans-serif; }
-			textarea { font-family: monaco, 나눔고딕, "Apple Gothic", sans-serif; }
 		</style>
 	</head>
 	<body>
-		<div style="margin-left:10px;">
-			<h1>myBatis log parser</h1>
-			<div id="div_origin" style="float:left">
-				<textarea id="txt_origin" rows="20" cols="100"></textarea>
+		<div class="container-fluid">
+
+			<div class="page-header">
+			  <h1>myBatis Log parser <small>my breakable toys</small></h1>
 			</div>
-			<div id="div_btn" class=".btn" style="float:left;margin-left:20px;">
-				<button id="btn_parse" class="btn btn-small">Parse</button>
+
+			<div class="row-fluid">
+				<span class="label">Original Log :</span>
+				<p>
+					<textarea id="txt_origin" class="span8" rows="8"></textarea>
+				</p>
 			</div>
-			<div id="div_parse" style="float:left;margin-left:20px;">
-				<textarea id="txt_parsing" rows="20" cols="100"></textarea>
+
+			<div class="row-fluid">
+				<p>
+					<button id="btn_parse" class="btn">Parse</button>
+					<button id="btn_parse" class="btn">Save ParsedSQL</button>
+					<button id="btn_parse" class="btn">Remove ParseSQL</button>
+					<button id="btn_parse" class="btn">View ParseSQL</button>
+				</p>
+			</div>
+
+
+			<div class="row-fluid">
+				<span class="label">Parsed SQL:</span>
+				<p>
+					<textarea id="txt_parsing" class="span8" rows="8"></textarea>
+				</p>
 			</div>
 		</div>
+
 		<script>
 			$(document).ready(function() {
+
+				tipJS.loadApp("myBatisLogParser");
 				/**
 				 * myBatis 로그 합치기
 				 * Preparing: Select dummy from dual where col = ? and col2 = ?
@@ -38,6 +59,7 @@
 				 * @return {[type]} [description]
 				 */
 				var doParse = function () {
+					var i=0, lastIdx = 0;
 					var $txt_origin = $("#txt_origin");
 					var $txt_parsing = $("#txt_parsing");
 
@@ -51,12 +73,22 @@
 					parsingArr[0] = originArr[0].substring ( originArr[0].indexOf ("Preparing: ")+11 );
 					parsingArr[1] = originArr[1].substring ( originArr[1].indexOf ("Parameters: ")+12 );
 
+					if (originArr.length > 2) {
+						for (i =2; i < originArr.length; i++ ) {
+							parsingArr[1] += originArr[i];
+						}
+					}
 					preparing  = parsingArr[0];
 					paramArr = parsingArr[1].split(",");
-
-					for (var i = 0; i < paramArr.length; i++) {
+					console.log("paramArr:"+paramArr);
+					for (i = 0; i < paramArr.length; i++) {
 						var tempParams = paramArr[i];
-						param.val = $.trim ( tempParams.substring(0, tempParams.lastIndexOf("(")) );
+						lastIdx = tempParams.lastIndexOf("(");
+
+						param.val = $.trim ( tempParams.substring(0, lastIdx ) );
+							param.val  = "null";
+						}
+
 						param.typ = tempParams.substring(tempParams.lastIndexOf("(")+1, paramArr[i].lastIndexOf(")"));
 
 						if ( preparing.indexOf("?") >= 0 ) {
@@ -84,4 +116,9 @@
 <!--
 DEBUG: java.sql.Connection - ==>  Preparing: SELECT TEST1, TEST2 FROM DUAL WHERE COL1 = ? AND COL2 = ? AND NO = ?
 DEBUG: java.sql.PreparedStatement - ==> Parameters: test1(String), test2(String), 13(Long)
+
+DEBUG: java.sql.Connection - ==>  Preparing: UPDATE TBL_EXAMQUST_QITM_MGNT SET QUSTN_TYP_CD = ? , QITM_CLAS_CD = ? , PLU_CORT_ASW_YN = ? , ANSW_QITM_CNT = ? , QUSTN_ALSC = ? , QUSTN_CTT = ? , STPR_CTT = ? , UPDR_TEAM_CD = ? , UPDR_PART_CD = ? , UPDR_CREW_CD = ? , UPDR_ID = ? , CHG_DTM = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') WHERE EXAM_QSTN_PAG_SEQ = ? AND QITM_NO = ? 
+DEBUG: java.sql.PreparedStatement - ==> Parameters: null, (String), (String), null, null, 테스트 쥬유저?
+입니까22(String), 테스트 쥬유저?
+입니까22222222(String), null, null, null, admin(String), 50(Long), 1(Long)
 -->
