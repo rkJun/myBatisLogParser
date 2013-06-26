@@ -1,11 +1,9 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html lang="ko">
 	<head>
 		<meta charset="utf-8">
 		<title>MyBatis Log parser</title>
-<!--		<script src="js/jquery-2.0.2.js"></script> -->
-<!--		<sciprt src="js/bootstrap.js"></script> -->
-		<script src="js/tipJS-MVC-dev.js"></script>
+		<script src="js/common/tipJS-MVC-dev.js"></script>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<link href="css/common.css" rel="stylesheet" media="screen">
@@ -15,40 +13,50 @@
 	</head>
 	<body>
 		<div class="container-fluid">
+			<form id="defaultForm">
 
-			<div class="page-header">
-			  <h1>myBatis Log parser <small>my breakable toys</small></h1>
-			</div>
+				<div class="page-header">
+				  <h1>myBatis Log parser <small>my breakable toys</small></h1>
+				</div>
 
-			<div class="row-fluid">
-				<span class="label">Original Log :</span>
-				<p>
-					<textarea id="txt_origin" class="span8" rows="8"></textarea>
-				</p>
-			</div>
+				<div class="row-fluid">
+					<span class="label">Original Log :</span>
+					<p>
+						<textarea id="txt_origin" class="span8" rows="8"></textarea>
+					</p>
+				</div>
 
-			<div class="row-fluid">
-				<p>
-					<button id="btn_parse" class="btn">Parse</button>
-					<button id="btn_parse" class="btn">Save ParsedSQL</button>
-					<button id="btn_parse" class="btn">Remove ParseSQL</button>
-					<button id="btn_parse" class="btn">View ParseSQL</button>
-				</p>
-			</div>
+				<div id="div_button_list" class="row-fluid">
+					<p>
+						<button id="btn_parse" class="btn">Parse</button>
+						<button id="btn_save" class="btn">Save ParsedSQL</button>
+						<button id="btn_remove" class="btn">Remove ParsedSQL</button>
+						<button id="btn_list" class="btn">list ParsedSQL</button>
+					</p>
+				</div>
 
-
-			<div class="row-fluid">
-				<span class="label">Parsed SQL:</span>
-				<p>
-					<textarea id="txt_parsing" class="span8" rows="8"></textarea>
-				</p>
-			</div>
+				<div class="row-fluid">
+					<span class="label">Parsed SQL:</span>
+					<p>
+						<textarea id="txt_parsing" class="span8" rows="8"></textarea>
+					</p>
+				</div>
+			</form>
 		</div>
 
 		<script>
 			$(document).ready(function() {
 
-				tipJS.loadApp("myBatisLogParser");
+				tipJS.loadApp("parser");
+
+				$("#defaultForm").submit(function(e) {
+					e.preventDefault();
+				});
+
+				$("#div_button_list").on("click", "#btn_parse", function(e) {
+					tipJS.action("parser.parse", $("#txt_origin").val());
+				});
+ 
 				/**
 				 * myBatis 로그 합치기
 				 * Preparing: Select dummy from dual where col = ? and col2 = ?
@@ -58,6 +66,7 @@
 				 *
 				 * @return {[type]} [description]
 				 */
+
 				var doParse = function () {
 					var i=0, lastIdx = 0;
 					var $txt_origin = $("#txt_origin");
@@ -86,6 +95,8 @@
 						lastIdx = tempParams.lastIndexOf("(");
 
 						param.val = $.trim ( tempParams.substring(0, lastIdx ) );
+
+						if (lastIdx < 0) {
 							param.val  = "null";
 						}
 
@@ -107,7 +118,7 @@
 				$("body").on("click", "button", function (e) {
 					doParse();
 				});
-
+				
 			});
 		</script>
 	</body>
@@ -117,7 +128,7 @@
 DEBUG: java.sql.Connection - ==>  Preparing: SELECT TEST1, TEST2 FROM DUAL WHERE COL1 = ? AND COL2 = ? AND NO = ?
 DEBUG: java.sql.PreparedStatement - ==> Parameters: test1(String), test2(String), 13(Long)
 
-DEBUG: java.sql.Connection - ==>  Preparing: UPDATE TBL_EXAMQUST_QITM_MGNT SET QUSTN_TYP_CD = ? , QITM_CLAS_CD = ? , PLU_CORT_ASW_YN = ? , ANSW_QITM_CNT = ? , QUSTN_ALSC = ? , QUSTN_CTT = ? , STPR_CTT = ? , UPDR_TEAM_CD = ? , UPDR_PART_CD = ? , UPDR_CREW_CD = ? , UPDR_ID = ? , CHG_DTM = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') WHERE EXAM_QSTN_PAG_SEQ = ? AND QITM_NO = ? 
+DEBUG: java.sql.Connection - ==>  Preparing: UPDATE TBL_EXAMQUST_QITM_MGNT SET QUSTN_TYP_CD = ? , QITM_CLAS_CD = ? , PLU_CORT_ASW_YN = ? , ANSW_QITM_CNT = ? , QUSTN_ALSC = ? , QUSTN_CTT = ? , STPR_CTT = ? , UPDR_TEAM_CD = ? , UPDR_PART_CD = ? , UPDR_CREW_CD = ? , UPDR_ID = ? , CHG_DTM = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') WHERE EXAM_QSTN_PAG_SEQ = ? AND QITM_NO = ?
 DEBUG: java.sql.PreparedStatement - ==> Parameters: null, (String), (String), null, null, 테스트 쥬유저?
 입니까22(String), 테스트 쥬유저?
 입니까22222222(String), null, null, null, admin(String), 50(Long), 1(Long)
