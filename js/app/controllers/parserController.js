@@ -92,7 +92,7 @@ tipJS.controller({
 		var list = parserModel.getListParsedSQL();
 		parserView.set$div_history(list);
 
-		parserView.set$span_cnt("");
+		//parserView.set$span_cnt("");
 		parserView.set$span_cnt(list.length);
 	},
 

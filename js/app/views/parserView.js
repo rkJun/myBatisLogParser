@@ -31,11 +31,10 @@ tipJS.view({
 
        var _templateConfig = {
             url:"js/app/tpl/parseTpl.html",
-            renderTo:"span_cnt",
+            //renderTo:"span_cnt",
             data: param
         };
-        this.renderTemplate(_templateConfig);
-
+        $("#span_cnt").html ( this.renderTemplate(_templateConfig) );
     }
 
 
