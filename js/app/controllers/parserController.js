@@ -5,8 +5,17 @@ tipJS.controller({
 	beforeInvoke:function(){
 		tipJS.debug(this.name + ".beforeInvoke");
 	},
-	
-	parse : function ( params ) {
+
+	/**
+	 * myBatis 로그 합치기
+	 * Preparing: Select dummy from dual where col = ? and col2 = ?
+	 * Parameters: val1(String), val2(String)
+	 *
+	 * Result) select ... where col = val1 and col2 = val2
+	 *
+	 * @return {[type]} [description]
+	 */
+	parse : function () {
 
 		var parserModel = this.loadModel("parserModel");
 		var parserView = this.loadView("parserView");
@@ -18,8 +27,7 @@ tipJS.controller({
 
 		var originArr = [], parsingArr = [], paramArr = [];
 		var paramCnt = 0;
-		var result = "";
-		var preparing = "";
+		var result,preparing = "";
 		var param = {};
 
 		originArr = $txt_origin.val().split("\n");
@@ -33,7 +41,7 @@ tipJS.controller({
 		}
 		preparing  = parsingArr[0];
 		paramArr = parsingArr[1].split(",");
-		console.log("paramArr:"+paramArr);
+		tipJS.debug("paramArr:"+paramArr);
 		for (i = 0; i < paramArr.length; i++) {
 			var tempParams = paramArr[i];
 			lastIdx = tempParams.lastIndexOf("(");
@@ -56,23 +64,39 @@ tipJS.controller({
 
 		}
 		result = preparing;
-		$txt_parsing.html(result);
 
+		parserView.set$txt_parsing(result);
 	},
 
-	save : function ( params ) {
+	save : function () {
+		var parserModel = this.loadModel("parserModel");
+		var parserView = this.loadView("parserView");
 
+		var maxKey = parserModel.getMaxKey();
+		var parsedSql = parserView.get$txt_parsing().val();
+
+		parserModel.setParsedSQL(maxKey, parsedSql);
 	},
 
-	remove : function ( params ) {
+	remove : function () {
+		var parserModel = this.loadModel("parserModel");
+		var parserView = this.loadView("parserView");
 
+		parserModel.removeMaxParsedSQL();
 	},
 
-	list : function ( params ) {
+	list : function () {
+		var parserModel = this.loadModel("parserModel");
+		var parserView = this.loadView("parserView");
+		
+		var list = parserModel.getListParsedSQL();
+		parserView.set$div_history(list);
 
+		parserView.set$span_cnt("");
+		parserView.set$span_cnt(list.length);
 	},
 
-	sample : function ( params ) {
+	sample : function () {
 		var parserModel = this.loadModel("parserModel");
 		var parserView = this.loadView("parserView");
 		var sampleText = parserModel.getSampleText();
@@ -93,13 +117,16 @@ tipJS.controller({
 				this.sample();
 			break;
 			case "save":
-			alert("save");
+				this.save();
 			break;
 			case "remove":
-			alert("remove");
+				this.remove();
 			break;
 			case "list":
-			alert("list");
+			this.list();
+			break;
+			case "clear":
+			localStorage.clear();
 			break;
 		}
 
@@ -130,6 +157,6 @@ tipJS.controller({
 		$input.val('');
 		*/
 		//this.loadView("renderer").updateView( globalTodos );
-		//this.loadModel("utils").store( globalTodos.STORE_KEY, globalTodos.todos );
+		
 	}
 });

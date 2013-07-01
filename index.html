@@ -19,110 +19,60 @@
 				  <h1>myBatis Log parser <small>my breakable toys</small></h1>
 				</div>
 
-				<div class="row-fluid">
-					<span class="label">Original Log :</span>
-					<p>
-						<textarea id="txt_origin" class="span8" rows="8"></textarea>
-					</p>
-				</div>
+				<div class="container-fluid">
+					<div class="row-fluid">
+						<div class="span9">
+							<span class="label">Original Log :</span>
+							<p>
+								<textarea id="txt_origin" class="span11" rows="8"></textarea>
+							</p>
 
-				<div id="div_button_list" class="row-fluid">
-					<p>
-						<button id="btn_sample" class="btn">Sample</button>
-						<button id="btn_parse" class="btn">Parse</button>
-						<button id="btn_save" class="btn">Save ParsedSQL</button>
-						<button id="btn_remove" class="btn">Remove ParsedSQL</button>
-						<button id="btn_list" class="btn">list ParsedSQL</button>
-						<span id="span_status"></span>
-					</p>
-				</div>
+							<div id="div_button_list" class="row-fluid">
+								<p>
+									<button id="btn_sample" class="btn">Sample</button>
+									<button id="btn_parse" class="btn">Parse</button>
+									<button id="btn_save" class="btn">Save Parsed SQL</button>
+									<button id="btn_remove" class="btn">Remove Parsed SQL</button>
+									<button id="btn_list" class="btn">List Parsed SQL</button>
+									<button id="btn_clear" class="btn">Clear LocalStorage</button>
+									<span id="span_status"></span>
+								</p>
+							</div>
 
-				<div class="row-fluid">
-					<span class="label">Parsed SQL:</span>
-					<p>
-						<textarea id="txt_parsing" class="span8" rows="8"></textarea>
-					</p>
+							<div class="row-fluid">
+								<span class="label">Parsed SQL:</span>
+								<p>
+									<textarea id="txt_parsing" class="span11" rows="8"></textarea>
+								</p>
+							</div>
+
+						</div>
+
+						<div class="span3">
+							<h4>history <span id="span_cnt"></span></h4>
+							<div id="div_history">
+							</div>
+						</div>
+					</div>
+					<footer>
+						<p>2013 my Breakable Toys, myBatis Log Parser. Written by <a href="http://twitter.com/rkjun" target="_blank">rkJun</a>. Powered by <a href="http://tipjs.com" target="_blank">tipJS - JavaScript MVC Framework</a></p>
+					</footer>
 				</div>
 			</form>
 		</div>
 
 		<script>
 			$(document).ready(function() {
-
 				tipJS.loadApp("app");
-
 				$("#defaultForm").submit(function(e) {
 					e.preventDefault();
 				});
 
-				$("#div_button_list").on("click", "#btn_parse", function(e) {
-					tipJS.action("app.parserController", "parse");
-				}).on("click", "#btn_sample", function(e) {
-					tipJS.action("app.parserController", "sample");
+				$("#div_button_list")
+				.on("click", "button", function(e) {
+					var btnActName = $(this).attr("id").substring(4)
+					tipJS.action("app.parserController", btnActName);
 				});
-
-				/**
-				 * myBatis 로그 합치기
-				 * Preparing: Select dummy from dual where col = ? and col2 = ?
-				 * Parameters: val1(String), val2(String)
-				 *
-				 * Result) select ... where col = val1 and col2 = val2
-				 *
-				 * @return {[type]} [description]
-				 */
-
-				var doParse = function () {
-					var i=0, lastIdx = 0;
-					var $txt_origin = $("#txt_origin");
-					var $txt_parsing = $("#txt_parsing");
-
-					var originArr = [], parsingArr = [], paramArr = [];
-					var paramCnt = 0;
-					var result = "";
-					var preparing = "";
-					var param = {};
-
-					originArr = $txt_origin.val().split("\n");
-					parsingArr[0] = originArr[0].substring ( originArr[0].indexOf ("Preparing: ")+11 );
-					parsingArr[1] = originArr[1].substring ( originArr[1].indexOf ("Parameters: ")+12 );
-
-					if (originArr.length > 2) {
-						for (i =2; i < originArr.length; i++ ) {
-							parsingArr[1] += originArr[i];
-						}
-					}
-					preparing  = parsingArr[0];
-					paramArr = parsingArr[1].split(",");
-					console.log("paramArr:"+paramArr);
-					for (i = 0; i < paramArr.length; i++) {
-						var tempParams = paramArr[i];
-						lastIdx = tempParams.lastIndexOf("(");
-
-						param.val = $.trim ( tempParams.substring(0, lastIdx ) );
-
-						if (lastIdx < 0) {
-							param.val  = "null";
-						}
-
-						param.typ = tempParams.substring(tempParams.lastIndexOf("(")+1, paramArr[i].lastIndexOf(")"));
-
-						if ( preparing.indexOf("?") >= 0 ) {
-
-							if (param.typ === "String") {
-								param.val = "'"+param.val+"'";
-							}
-							preparing = preparing.replace("?", param.val);
-						}
-
-					}
-					result = preparing;
-					$txt_parsing.html(result);
-				};
-
-				$("body").on("click", "button", function (e) {
-					//doParse();
-				});
-				
 			});
 		</script>
 	</body>
