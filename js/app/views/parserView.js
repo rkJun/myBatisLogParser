@@ -30,7 +30,7 @@ tipJS.view({
        }
 
        var _templateConfig = {
-            url:"/js/app/tpl/parseTpl.html",
+            url:"js/app/tpl/parseTpl.html",
             renderTo:"span_cnt",
             data: param
         };
