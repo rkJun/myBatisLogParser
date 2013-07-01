@@ -28,10 +28,12 @@
 
 				<div id="div_button_list" class="row-fluid">
 					<p>
+						<button id="btn_sample" class="btn">Sample</button>
 						<button id="btn_parse" class="btn">Parse</button>
 						<button id="btn_save" class="btn">Save ParsedSQL</button>
 						<button id="btn_remove" class="btn">Remove ParsedSQL</button>
 						<button id="btn_list" class="btn">list ParsedSQL</button>
+						<span id="span_status"></span>
 					</p>
 				</div>
 
@@ -47,16 +49,18 @@
 		<script>
 			$(document).ready(function() {
 
-				tipJS.loadApp("parser");
+				tipJS.loadApp("app");
 
 				$("#defaultForm").submit(function(e) {
 					e.preventDefault();
 				});
 
 				$("#div_button_list").on("click", "#btn_parse", function(e) {
-					tipJS.action("parser.parse", $("#txt_origin").val());
+					tipJS.action("app.parserController", "parse");
+				}).on("click", "#btn_sample", function(e) {
+					tipJS.action("app.parserController", "sample");
 				});
- 
+
 				/**
 				 * myBatis 로그 합치기
 				 * Preparing: Select dummy from dual where col = ? and col2 = ?
@@ -116,7 +120,7 @@
 				};
 
 				$("body").on("click", "button", function (e) {
-					doParse();
+					//doParse();
 				});
 				
 			});
@@ -127,9 +131,4 @@
 <!--
 DEBUG: java.sql.Connection - ==>  Preparing: SELECT TEST1, TEST2 FROM DUAL WHERE COL1 = ? AND COL2 = ? AND NO = ?
 DEBUG: java.sql.PreparedStatement - ==> Parameters: test1(String), test2(String), 13(Long)
-
-DEBUG: java.sql.Connection - ==>  Preparing: UPDATE TBL_EXAMQUST_QITM_MGNT SET QUSTN_TYP_CD = ? , QITM_CLAS_CD = ? , PLU_CORT_ASW_YN = ? , ANSW_QITM_CNT = ? , QUSTN_ALSC = ? , QUSTN_CTT = ? , STPR_CTT = ? , UPDR_TEAM_CD = ? , UPDR_PART_CD = ? , UPDR_CREW_CD = ? , UPDR_ID = ? , CHG_DTM = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') WHERE EXAM_QSTN_PAG_SEQ = ? AND QITM_NO = ?
-DEBUG: java.sql.PreparedStatement - ==> Parameters: null, (String), (String), null, null, 테스트 쥬유저?
-입니까22(String), 테스트 쥬유저?
-입니까22222222(String), null, null, null, admin(String), 50(Long), 1(Long)
--->
+ -->

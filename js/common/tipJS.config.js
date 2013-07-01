@@ -22,8 +22,7 @@ tipJS.config({
 	// 	"/tipJS/examples/common/views/CommonView.js",
 	// ],
 	applicationPath:{
-		parser : 'js/parser',
-		saver  : 'js/saver'
+		app : 'js/app'
  	}
  } );
 	
