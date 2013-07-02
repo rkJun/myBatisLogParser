@@ -5,7 +5,11 @@ tipJS.define({
 	noCacheAuto:true,
 	name:"app",
 	controllers:[
-		"parserController.js"
+		"parseController.js",
+		"saveController.js",
+		"removeController.js",
+		"listController.js",
+		"sampleController.js"
 		// "insert.js",
 		// "delete.js",
 		// "list.js",

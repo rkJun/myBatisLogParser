@@ -21,12 +21,9 @@ tipJS.view({
     	return $("#txt_parsing").val(param);
     },
     set$div_history : function(param){
-        return $("#div_history").html(param);
-    },
-    set$span_cnt : function(param) {
 
        if ( param == "" || param == null ) {
-           return $("#span_cnt").html("");
+           return $("#div_history").html("");
        }
 
        var _templateConfig = {
@@ -34,7 +31,24 @@ tipJS.view({
             //renderTo:"span_cnt",
             data: param
         };
-        $("#span_cnt").html ( this.renderTemplate(_templateConfig) );
+        return $("#div_history").html ( this.renderTemplate(_templateConfig) );
+
+        //return $("#div_history").html(param);
+    },
+    set$span_cnt : function(param) {
+
+
+       // if ( param == "" || param == null ) {
+       //     return $("#span_cnt").html("");
+       // }
+
+       // var _templateConfig = {
+       //      url:"js/app/tpl/parseTpl.html",
+       //      //renderTo:"span_cnt",
+       //      data: param
+       //  };
+       // $("#span_cnt").html ( this.renderTemplate(_templateConfig) );
+        $("#span_cnt").html ( param );
     }
 
 

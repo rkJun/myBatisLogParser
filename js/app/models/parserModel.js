@@ -28,5 +28,8 @@ tipJS.model({
 	removeMaxParsedSQL : function (key) {
 		var maxKey = this.getMaxKey();
  		localStorage.removeItem(parseInt(maxKey-1));
+	},
+	clear : function () {
+		localStorage.clear();
 	}
 });
