@@ -1,10 +1,11 @@
 tipJS.define({
 	noCache:true,
-	noCacheVersion:"1.00",
+	//noCacheVersion:"1.00",
 	noCacheParam:"tipJS",
 	noCacheAuto:true,
 	name:"app",
 	controllers:[
+		"initController.js",
 		"parseController.js",
 		"saveController.js",
 		"removeController.js",
@@ -22,9 +23,7 @@ tipJS.define({
 		"parserView.js"
 	],
 	onLoad:function(params){
-        // call Controller
-        // tipJS.action("someApplication.someController", "someValue");
-        // tipJS.action().someApplication.someController("someValue");
-    }
+		tipJS.action.app.initController();
+	}
 });
 
