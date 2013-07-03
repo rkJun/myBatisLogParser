@@ -14,6 +14,9 @@ tipJS.view({
     get$span_cnt : function() {
         return $("#span_cnt");
     },
+    get$class_alert : function() {
+        return $(".alert");
+    },
     set$txt_origin : function(param){
     	return $("#txt_origin").val(param);
     },

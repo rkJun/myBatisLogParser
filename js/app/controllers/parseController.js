@@ -67,19 +67,21 @@ tipJS.controller({
 
 		parserView.set$txt_parsing(result);
 	},
-	invoke : function( params ){
-
+	isRequiredOk : function ( params ) {
 		var parserView = this.loadView("parserView");
-		if ( $.trim ( parserView.get$txt_origin().val() ) == "" ) {
+		if ( $.trim ( parserView.get$txt_origin().val() ) === "" ) {
 			parserView.set$div_alertType("Required Error");
 			parserView.set$div_alertMsg("Original Log 를 입력하세요. (잘모르겠으면 sample 버튼 누르세요)");
 			parserView.get$txt_origin().focus();
-			$(".alert").show();
+			parserView.get$class_alert().show();
 			return false;
-		} else {
-			$(".alert").hide();
-			parserView.set$div_alertType("");
-			parserView.set$div_alertMsg("");
+		} 
+		return true;
+	},
+	invoke : function( params ){
+
+		if ( !this.isRequiredOk() ) {
+			return false;
 		}
 
 		this.parse();
