@@ -36,20 +36,14 @@ tipJS.view({
         //return $("#div_history").html(param);
     },
     set$span_cnt : function(param) {
-
-
-       // if ( param == "" || param == null ) {
-       //     return $("#span_cnt").html("");
-       // }
-
-       // var _templateConfig = {
-       //      url:"js/app/tpl/parseTpl.html",
-       //      //renderTo:"span_cnt",
-       //      data: param
-       //  };
-       // $("#span_cnt").html ( this.renderTemplate(_templateConfig) );
-        $("#span_cnt").html ( param );
-    }
+        $("#span_cnt").html( param );
+    },
+    set$div_alertType : function(param) {
+        $("#div_alertType").html( param );
+    },
+    set$div_alertMsg : function(param) {
+        $("#div_alertMsg").html( param );
+    },
 
 
 });
