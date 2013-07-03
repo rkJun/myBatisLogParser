@@ -20,8 +20,8 @@ tipJS.controller({
 		if ( !this.isValid(parsedSql) ) {
 			return false;
 		}
-
-		var maxKey = this.loadModel("parserModel").getMaxKey();
+		var parserModel = this.loadModel("parserModel");
+		var maxKey = parserModel.getMaxKey();
 		parserModel.setParsedSQL(maxKey, parsedSql);
 	}
 });
