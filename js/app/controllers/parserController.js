@@ -1,3 +1,7 @@
+/**
+ * parserController was deprecated.
+ *  
+ */
 tipJS.controller({
 	name : "app.parserController",
 	async: true,
