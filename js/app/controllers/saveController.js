@@ -15,16 +15,13 @@ tipJS.controller({
 	},
 
 	invoke : function( params ){
-		var parserModel = this.loadModel("parserModel");
-		var parserView = this.loadView("parserView");
-
-		var maxKey = parserModel.getMaxKey();
-		var parsedSql = parserView.get$txt_parsing().val();
+		var parsedSql = this.loadView("parserView").get$txt_parsing().val();
 
 		if ( !this.isValid(parsedSql) ) {
 			return false;
 		}
-
+		var parserModel = this.loadModel("parserModel");
+		var maxKey = parserModel.getMaxKey();
 		parserModel.setParsedSQL(maxKey, parsedSql);
 	}
 });
